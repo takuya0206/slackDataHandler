@@ -19,9 +19,9 @@ Slackのワークスペースよりデータをエクスポートし、`data`デ
 └{チャンネル名}3
 └{チャンネル名}4
 ...
-channels.json
-integration_logs.json
-users.json
+└channels.json
+└integration_logs.json
+└users.json
 ```
 
 エクスポートは上記の形式を想定しており、{ワークスペース名} Slack export {開始日程} - {終了日程} は含めず、その配下のデータを移す。
