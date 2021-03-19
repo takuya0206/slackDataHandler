@@ -17,14 +17,14 @@ const getUserName = (userId) => {
   })
 }
 
-
+// 全てのチャンネルフォルダにある全てのjsonファイルを統合して一つのarrayにする
 const getData = () => {
   return new Promise( async (resolve) => {
     let result = []
     const dirs = fs.readdirSync('./data')
     await Promise.all(dirs.map( async (dir) => {
       const dirPath = path.join('./data', dir)
-      if(/\./.test(dirPath) !== true){
+      if(/\./.test(dirPath) !== true){ // slackのチャンネル名は記号が-しか使えないため、.があればディレクトリではないとする
         const files = fs.readdirSync(dirPath)
         await Promise.all(files.map( async (file) => {
           if(/\.json/.test(file)) {
