@@ -17,19 +17,20 @@ const getUserName = (userId) => {
   })
 }
 
-// 全てのチャンネルフォルダにある全てのjsonファイルを統合して一つのarrayにする
+// チャンネルフォルダごとのjsonファイルを全て統合してarrayにしObjectで返す
 const getData = () => {
   return new Promise( async (resolve) => {
-    let result = []
+    let result = {}
     const dirs = fs.readdirSync('./data')
     await Promise.all(dirs.map( async (dir) => {
       const dirPath = path.join('./data', dir)
       if(/\./.test(dirPath) !== true){ // slackのチャンネル名は記号が-しか使えないため、.があればディレクトリではないとする
+        result[dir] = []
         const files = fs.readdirSync(dirPath)
         await Promise.all(files.map( async (file) => {
           if(/\.json/.test(file)) {
             const filePath = path.join('./data', dir, file)
-            result = result.concat(JSON.parse(fs.readFileSync(filePath, 'utf8')))
+            result[dir] = result[dir].concat(JSON.parse(fs.readFileSync(filePath, 'utf8')))
           }
         }))
       }
@@ -38,8 +39,19 @@ const getData = () => {
   })
 }
 
+const sortObjectByValue = (unsortedObject) => {
+  const result = Object.entries(unsortedObject)
+  result.sort((p1, p2) => {
+    const p1Val = p1[1]
+    const p2Val = p2[1]
+    return p2Val - p1Val
+  })
+  return Object.fromEntries(result)
+}
+
 
 module.exports = {
   getUserName,
-  getData
+  getData,
+  sortObjectByValue
 }
